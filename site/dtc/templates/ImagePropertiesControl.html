@@ -1,0 +1,51 @@
+<div data-dojo-attach-point="controlRoot" style="width: 100%" class="controlRoot">
+	Brightness:  
+	<div data-dojo-attach-point= "brightnessSlider"
+    style="width:100%;"
+    name="brightnessSlider"
+    data-dojo-type="dijit/form/HorizontalSlider"
+    data-dojo-props="value:0,
+    minimum: -50,
+    maximum:50,
+    discreteValues:100,
+    intermediateChanges:false,
+    showButtons:false"></div>
+	
+	Contrast: 
+	<div data-dojo-attach-point= "contrastSlider"
+    style="width:100%;"
+    name="contrastSlider"
+    data-dojo-type="dijit/form/HorizontalSlider"
+    data-dojo-props="value:0,
+    minimum: -50,
+    maximum:50,
+    discreteValues:100,
+    intermediateChanges:false,
+    showButtons:false"></div>
+	
+	Gamma:
+	<div data-dojo-attach-point= "gammaSlider"
+    style="width:100%;"
+    name="gammaSlider"
+    data-dojo-type="dijit/form/HorizontalSlider"
+    data-dojo-props="value:0,
+    minimum: -50,
+    maximum:50,
+    discreteValues:100,
+    intermediateChanges:false,
+    showButtons:false"></div>
+
+	
+	<table style="width:100%; border-width: 0px; text-align: center">
+		<tr>
+			<td>Red</td><td>Green</td><td>Blue</td>
+		</tr>
+		<tr>
+			<td><select data-dojo-attach-point="redSelect" name="redSelect" data-dojo-type="dijit/form/Select" class="channelSelect"></select></td>
+			<td><select data-dojo-attach-point="greenSelect" name="greenSelect" data-dojo-type="dijit/form/Select" class="channelSelect"></select></td>
+			<td><select data-dojo-attach-point="blueSelect" name="blueSelect" data-dojo-type="dijit/form/Select" class="channelSelect"></select></td>
+		</tr>
+	</table>
+	
+	
+</div>

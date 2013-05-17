@@ -1,0 +1,21 @@
+.mensurationBox {
+	border-top: 1px solid;
+	border-bottom: 2px solid;
+	padding: 5px; 
+}
+
+.iconBaseTop {
+    background: url("../assets/BaseTop.png") no-repeat scroll center center transparent;
+    height: 32px;
+    width: 32px;
+}
+.iconBaseTopShadow {
+    background: url("../assets/BaseTopShadow.png") no-repeat scroll center center transparent;
+    height: 32px;
+    width: 32px;
+}
+.iconTopTopShadow {
+    background: url("../assets/TopTopShadow.png") no-repeat scroll center center transparent;
+    height: 32px;
+    width: 32px;
+}
