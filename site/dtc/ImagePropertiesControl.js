@@ -7,9 +7,9 @@
 
 define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin",
 "dojo/text!./templates/ImagePropertiesControl.html", 
-"dijit/form/HorizontalSlider", "dijit/form/Select",
+"dijit/form/HorizontalSlider", "dijit/form/Select", "dijit/form/CheckBox",
 "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dijit/registry"], function(declare, connect, array, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, 
-	HorizontalSlider, Select,
+	HorizontalSlider, Select, CheckBox,
 	dom, domStyle, domConstruct, registry) {
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		declaredClass : "dtc.ImagePropertiesControl",
