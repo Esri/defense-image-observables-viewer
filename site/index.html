@@ -15,6 +15,7 @@
     <script type="text/javascript">
     var path_location = location.pathname.replace(/\/[^/]+$/, '');
     var dojoConfig = {
+    	//Make sure module loading is async
       parseOnLoad: true,
       packages: [{
         name: "esriTemplate",
@@ -32,6 +33,10 @@
       	//JT add DTC dijits
       	name: "dtc",
       	location: path_location + '/dtc'
+      },{
+      	//JT add esrix
+      	name: "esrix",
+      	location: path_location + '/esrix'
       }]
     };
     </script>
@@ -44,6 +49,7 @@
 
     <script type="text/javascript" src="javascript/layout.js">
     </script>
+    <script type="text/javascript" src="esrix/layers/Filters.js"></script>
     <script type="text/javascript">
       dojo.require("utilities.App");
       dojo.require("templateConfig.commonConfig");
@@ -235,7 +241,7 @@
           <!--end Map section-->
 	      <!-- JT - Right Pane for Imagery -->
 	      <div id="rightPane" data-dojo-type="dijit.layout.ContentPane"  data-dojo-props='region:"right"'
-	      style="height:100%;padding:0;width:200px;display:none"><div id="imgPane"></div></div>
+	      style="height:100%;padding:0;width:200px;"><div id="imgPane"></div></div>
         </div>
       </div>
       <div id="bottomPane" dojotype="dijit.layout.ContentPane" region="bottom"

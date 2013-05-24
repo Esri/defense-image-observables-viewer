@@ -69,6 +69,26 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 			return (this.imageService.id)
 		},
 
+		_updateBrightness : function() {
+			
+		}, 
+		
+		_updateContrast : function() {
+			
+		},
+		
+		_updateGamma: function() {
+			
+		},
+		
+		_toggleDRA: function() {
+			
+		},
+		
+		_updateChannel: function() {
+			
+		}
+
 	});
 
 });
