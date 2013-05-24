@@ -2,19 +2,19 @@
  * Mensuration Widget
  * Logic code from Ian Wilson's (Esri PS) Image Observables demo
  * Transformed into a widget (mostly AMD) for the Basic Viewer by James Tedrick
- * 
+ *
  * Declaration syntax:
  * require(['dtc/Mensuration], function(Mensuration){
  * 	new Mensuration({map: <esri.Map>, imageService: <esri.layers.ArcGISImageServiceLayer>}, <string|domNode>domNode)
  * });
- * 
+ *
  * Resources used by this widget:
  * 		-templates/Mensuration.html
  * 		-css/Mensuration.css
  * 		-assets/BaseTop.png
  * 		-assets/BaseTopShadow.png
  * 		-assets/TopTopShadow.png
- * 
+ *
  */
 
 define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/Mensuration.html", "dijit/form/Select", "dojo/dom", "dojo/dom-attr", "dojo/dom-construct", "dijit/registry"], function(declare, connect, array, lang, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, dom, domAttr, domConstruct, registry) {
@@ -50,7 +50,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			title : "Measure from the top of the building to the shadow of the top of the building",
 			iconClass : "iconTopTopShadow"
 		}],
-		//_UNITS: the types of valid (i.e., linear) units. Populates this.unitsSelect during startup 
+		//_UNITS: the types of valid (i.e., linear) units. Populates this.unitsSelect during startup
 		_UNITS : [{
 			value : "esriInches",
 			label : "Inches"
@@ -150,16 +150,18 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 
 		//Custom setter for the imageService variable to determine whether the service supports mensuration
 		_setImageServiceAttr : function(/*string (ID)*/serviceID) {
+			var _self = this;
 			//Get the service from the map and find out if it's mensurable
-			var service = this.map.getLayer(serviceID);
-			var isNotMensurable = (service.capabilities.indexOf('Mensuration') < 0);
-
-			//If the service doesn't support mensuration, disable the buttons
-			var buttons = registry.findWidgets(this.buttonContainer);
-			array.forEach(buttons, function(button) {
-				button.set('disabled', isNotMensurable);
-			});
-
+			if (serviceID) {
+				var service = this.map.getLayer(serviceID);
+				if (service.loaded === true) {
+					_self._buttonSet(service);
+				} else {
+					service.on("load", function() {
+						_self._buttonSet(service);
+					});
+				}
+			}
 			//Set the service
 			this._set('imageService', service);
 		},
@@ -167,6 +169,19 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 		//In nearly every case you should be able to widget.set('attribute', widget.get('attribute'))
 		_getImageServiceAttr : function() {
 			return (this.imageService.id)
+		},
+
+		_buttonSet : function(service) {
+			var isNotMensurable = true;
+			if (service.hasOwnProperty('capabilities')) {
+				isNotMensurable = (service.capabilities.indexOf('Mensuration') < 0);
+			}
+
+			//If the service doesn't support mensuration, disable the buttons
+			var buttons = registry.findWidgets(this.buttonContainer);
+			array.forEach(buttons, function(button) {
+				button.set('disabled', isNotMensurable);
+			});
 		},
 
 		drawBuildingHeight : function(method) {
@@ -203,11 +218,11 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 					f : 'json'
 				};
 				new esriRequest({
-					url: lang.replace("{0}/{1}", [imageServiceLayer, 'measure']),
-					content: contentObj,
+					url : lang.replace("{0}/{1}", [imageServiceLayer, 'measure']),
+					content : contentObj,
 					callbackParamName : "callback",
 					load : lang.hitch(_self, _self.onResult),
-					error : lang.hitch(_self, _self.onResultError) 
+					error : lang.hitch(_self, _self.onResultError)
 				});
 			});
 		},
@@ -222,10 +237,10 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 				places : 2
 			};
 			// UPDATE MEASUREMENT UI //
-			require(['dojo/number'], function(number){
+			require(['dojo/number'], function(number) {
 				domAttr.set('output.MensurationHeight', "innerHTML", number.format(Math.abs(measurement.value), numFormat));
 				domAttr.set('output.HeightUncertainty', "innerHTML", number.format(measurement.uncertainty, numFormat));
-				domAttr.set('output.LinearUnit', "innerHTML", measurement.unit.replace("esri", ""));	
+				domAttr.set('output.LinearUnit', "innerHTML", measurement.unit.replace("esri", ""));
 			});
 			// DISPLAY MEASUREMENT GRAPHICS //
 			//addMeasurementGraphic(userLine, measurement);
