@@ -151,9 +151,10 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 		//Custom setter for the imageService variable to determine whether the service supports mensuration
 		_setImageServiceAttr : function(/*string (ID)*/serviceID) {
 			var _self = this;
+			var service = null;
 			//Get the service from the map and find out if it's mensurable
 			if (serviceID) {
-				var service = this.map.getLayer(serviceID);
+				service = this.map.getLayer(serviceID);
 				if (service.loaded === true) {
 					_self._buttonSet(service);
 				} else {
