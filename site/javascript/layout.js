@@ -309,10 +309,8 @@ function initUI(response) {
     }
 
     //Add/Remove tools depending on the config settings or url parameters
-    if (configOptions.displayprint === true) {
-        addPrint();
-
-    }
+    //JT - Reordering as per request
+    //Layers, Basemap, Time, Print, [Share -> Save]
     if (configOptions.displaylayerlist === true) {
         addLayerList(layers);
     }
@@ -324,12 +322,50 @@ function initUI(response) {
             addBasemapGallery();
         }
     }
+    
+    //add the time slider if the layers are time-aware 
+    if (configOptions.displaytimeslider === true) {
+        if (response.itemInfo.itemData.widgets && response.itemInfo.itemData.widgets.timeSlider) {
+            addTimeSlider(response.itemInfo.itemData.widgets.timeSlider.properties);
+        } else {
+            //check to see if we have time aware layers 
+            var timeLayers = hasTemporalLayer(layers);
+            if (timeLayers.length > 0) {
+                //do we have time aware layers? If so create time properties
+                var fullExtent = getFullTimeExtent(timeLayers);
+                var timeProperties = {
+                    'startTime': fullExtent.startTime,
+                        'endTime': fullExtent.endTime,
+                        'thumbCount': 2,
+                        'thumbMovingRate': 2000,
+                        'timeStopInterval': findDefaultTimeInterval(fullExtent)
+                }
+                addTimeSlider(timeProperties);
+            } else {
+                configOptions.displaytimeslider = false;
+                esri.hide(dojo.byId('timeFloater'));
+            }
 
+        }
+    }
+ 
+    if (configOptions.displayprint === true) {
+        addPrint();
+
+    }
+    
+    //Display the share dialog if enabled 
+    if (configOptions.displayshare === true) {
+        createSocialLinks();
+    }
+    
+/* Measure Dijit embedded in imagery pane
     if (configOptions.displaymeasure === true) {
         addMeasurementWidget();
     } else {
         esri.hide(dojo.byId('floater'));
     }
+ */
     if (configOptions.displayelevation && configOptions.displaymeasure) {
 
         esri.show(dojo.byId('bottomPane'));
@@ -448,36 +484,9 @@ function initUI(response) {
         esri.hide(dojo.byId('webmap-toolbar-right'));
     }
 
-    //add the time slider if the layers are time-aware 
-    if (configOptions.displaytimeslider === true) {
-        if (response.itemInfo.itemData.widgets && response.itemInfo.itemData.widgets.timeSlider) {
-            addTimeSlider(response.itemInfo.itemData.widgets.timeSlider.properties);
-        } else {
-            //check to see if we have time aware layers 
-            var timeLayers = hasTemporalLayer(layers);
-            if (timeLayers.length > 0) {
-                //do we have time aware layers? If so create time properties
-                var fullExtent = getFullTimeExtent(timeLayers);
-                var timeProperties = {
-                    'startTime': fullExtent.startTime,
-                        'endTime': fullExtent.endTime,
-                        'thumbCount': 2,
-                        'thumbMovingRate': 2000,
-                        'timeStopInterval': findDefaultTimeInterval(fullExtent)
-                }
-                addTimeSlider(timeProperties);
-            } else {
-                configOptions.displaytimeslider = false;
-                esri.hide(dojo.byId('timeFloater'));
-            }
 
-        }
-    }
 
-    //Display the share dialog if enabled 
-    if (configOptions.displayshare === true) {
-        createSocialLinks();
-    }
+
 
     //resize the border container 
     dijit.byId('bc').resize();
@@ -622,8 +631,9 @@ function updateLinkUrls() {
 
 function createLink(mapTitle, url) {
     dojo.byId('mailLink').href = "mailto:?subject=" + mapTitle + "&body=Check out this map: %0D%0A " + url;
-    dojo.byId('facebookLink').href = "http://www.facebook.com/sharer.php?u=" + url + "&t=" + mapTitle;
-    dojo.byId('twitterLink').href = "http://www.twitter.com/home?status=" + mapTitle + "+" + url;
+    //Disable Facebook & Twitter
+    //dojo.byId('facebookLink').href = "http://www.facebook.com/sharer.php?u=" + url + "&t=" + mapTitle;
+    //dojo.byId('twitterLink').href = "http://www.twitter.com/home?status=" + mapTitle + "+" + url;
 }
 
 function getBasemapGroup() {
@@ -1232,6 +1242,8 @@ function createSocialLinks() {
         iconClass: "emailIcon",
         disabled: true
     }));
+	//JT - disable facebook & twitter
+	/*
     menu.addChild(new dijit.anchorMenuItem({
         label: esri.substitute({
             facebook_text: i18n.tools.share.menu.facebook.label
@@ -1246,6 +1258,7 @@ function createSocialLinks() {
         iconClass: "twitterIcon",
         disabled: true
     }));
+    */
     //create dropdown button to display menu
     var menuButton = new dijit.form.DropDownButton({
         label: i18n.tools.share.label,
