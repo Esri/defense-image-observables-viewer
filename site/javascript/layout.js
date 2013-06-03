@@ -467,6 +467,10 @@ function initUI(response) {
         if (configOptions.displaylegend === true) {
             addLegend(layerInfo);
         }
+        //JT If the Editor and other left pane widgets are present, toggle the editor widget
+        if (configOptions.displayeditor === true && (configOptions.displaylegend == true || (configOptions.displaydetails == ture && configOptions.description !== ""))) {
+        	navigateStack('editPanel');
+        }
         if (configOptions.leftPanelVisibility === false) {
             hideLeftPanel();
         }
@@ -1682,3 +1686,4 @@ function addImageryPane(){
 		IP.startup();
 	})
 }      
+

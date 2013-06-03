@@ -4,7 +4,7 @@
  * 05/10/2013
  */
 
-define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImageryPane.html", 'dijit/form/Select', "esri/config", "dojo/dom", "dojo/dom-style", "dojo/dom-construct"], function(declare, connect, array, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, esriConfig, dom, domStyle, domConstruct) {
+define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImageryPane.html", 'dijit/form/Select', "esri/config", "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dijit/registry"], function(declare, connect, array, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, esriConfig, dom, domStyle, domConstruct, registry) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		declaredClass : "dtc.ImageryPane",
@@ -126,6 +126,13 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 
 						map.removeLayer(thisLayer);
 						map.addLayer(thisLayerEx, i);
+						//Update the Layer List to work with the new layer
+						array.forEach(registry.byId('layerMenu').getChildren(), function(menuItem){
+							if (menuItem.label === thisLayerEx.arcgisProps.title) {
+								menuItem.onChange = function(){thisLayerEx.setVisibility(!thisLayerEx.visible)}
+							}
+						});
+						
 						_self.imageServices.push({
 							label : thisLayerEx.arcgisProps.title,
 							id : thisLayerEx.id
