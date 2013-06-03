@@ -1,8 +1,13 @@
-.channelSelect {
-	width: 50px
-}
-
 .controlRoot > .dijitSlider {
 	margin-top: 5px;
 	margin-bottom: 15px;
+}
+
+.DRAcheck {
+	margin-left: 5px !important;
+}
+
+.resetButton {
+	margin-right: 5px;
+	right: 0px;
 }

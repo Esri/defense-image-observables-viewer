@@ -1,5 +1,5 @@
 <div data-dojo-attach-point="controlRoot" style="width: 100%" class="controlRoot">
-	Brightness:  
+	Brightness (<span data-dojo-attach-point="brightnessValue">0</span>):  
 	<div data-dojo-attach-point= "brightnessSlider"
     style="width:100%;"
     name="brightnessSlider"
@@ -8,10 +8,13 @@
     minimum: -100,
     maximum:100,
     discreteValues:201,
-    intermediateChanges:false,
-    showButtons:false"></div>
+    intermediateChanges:true,
+    showButtons:false">
+    </div>
+    
+    
 	
-	Contrast: 
+	Contrast (<span data-dojo-attach-point="contrastValue">0</span>): 
 	<div data-dojo-attach-point= "contrastSlider"
     style="width:100%;"
     name="contrastSlider"
@@ -20,33 +23,38 @@
     minimum: -100,
     maximum:100,
     discreteValues:201,
-    intermediateChanges:false,
+    intermediateChanges:true,
     showButtons:false"></div>
 	
-	Gamma:
+	Gamma (<span data-dojo-attach-point="gammaValue">1.0</span>):
 	<div data-dojo-attach-point= "gammaSlider"
     style="width:100%;"
     name="gammaSlider"
     data-dojo-type="dijit/form/HorizontalSlider"
-    data-dojo-props="value:0,
-    minimum: -50,
-    maximum:50,
+    data-dojo-props="value:1,
+    minimum: 0.1,
+    maximum:10,
     discreteValues:100,
     intermediateChanges:false,
     showButtons:false"></div>
 
-    <input id="DRAcheck" data-dojo-attach-point="DRAcheck" name="DRAcheck" data-dojo-type="dijit/form/CheckBox" /> <label for="DRAcheck">DRA</label>
 	
 	<table style="width:100%; border-width: 0px; text-align: center">
 		<tr>
 			<td>Red</td><td>Green</td><td>Blue</td>
 		</tr>
 		<tr>
-			<td><select data-dojo-attach-point="redSelect" name="redSelect" data-dojo-type="dijit/form/Select" class="channelSelect"></select></td>
-			<td><select data-dojo-attach-point="greenSelect" name="greenSelect" data-dojo-type="dijit/form/Select" class="channelSelect"></select></td>
-			<td><select data-dojo-attach-point="blueSelect" name="blueSelect" data-dojo-type="dijit/form/Select" class="channelSelect"></select></td>
+			<td><select data-dojo-attach-point="redSelect" name="redSelect" data-dojo-type="dijit/form/Select" class="channelSelect" style="width:50px"></select></td>
+			<td><select data-dojo-attach-point="greenSelect" name="greenSelect" data-dojo-type="dijit/form/Select" class="channelSelect" style="width:50px"></select></td>
+			<td><select data-dojo-attach-point="blueSelect" name="blueSelect" data-dojo-type="dijit/form/Select" class="channelSelect" style="width:50px"></select></td>
 		</tr>
 	</table>
+	<table style="width:100%; border-width: 0px">
+		<tr>
+			<td><input data-dojo-attach-point="DRAcheck" name="DRAcheck" data-dojo-type="dijit/form/CheckBox" class="DRAcheck" /> <label for="DRAcheck">DRA</label></td>
+			<td align="right"><button data-dojo-attach-point="resetButton" data-dojo-type="dijit/form/Button" class="resetButton">Reset</button></td>
+		</tr>
+	
 	
 	
 </div>

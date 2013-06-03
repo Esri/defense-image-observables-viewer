@@ -4,7 +4,7 @@
  * 05/10/2013
  */
 
-define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImageryPane.html", 'dijit/form/Select', "dojo/dom", "dojo/dom-style", "dojo/dom-construct"], function(declare, connect, array, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, dom, domStyle, domConstruct) {
+define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImageryPane.html", 'dijit/form/Select', "esri/config", "dojo/dom", "dojo/dom-style", "dojo/dom-construct"], function(declare, connect, array, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, esriConfig, dom, domStyle, domConstruct) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		declaredClass : "dtc.ImageryPane",
@@ -32,7 +32,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 		startup : function() {
 			var _self = this;
 
-			require(['dojo/has', 'esri/config'], function(has, esriConfig) {
+			require(['dojo/has'], function(has) {
 				//Add in checkers for Canvas & Web Workers
 				has.add("canvas2D", function(global, document, anElement) {
 					try {
@@ -105,7 +105,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 			require(['esrix/layers/ArcGISImageServiceLayerEx', 'dojo/data/ObjectStore', 'dojo/store/Memory', 'dojo/on', "dtc/ImagePropertiesControl", "dtc/Mensuration"], function(ImageLayerEx, ObjectStore, Memory, on, ImagePropertiesControl, Mensuration) {
 				/* Scan the map for image service layers
 				 * 1) Replace the Image Service Layer with extended image services supporting brightness/contrast preserving layer order
-				 * 2) Reset the declaredClass to esri.layers.ArcGISImageServiceLayer in case any code is checking against the class
+				 * 2) Reset the declaredClass to esri.layers.ArcGISImageServiceLayer in case any code is checking the class value 
 				 * 3) Add them to the set of image services to eventually populate the dropdown
 				 */
 				array.forEach(_self.map.layerIds, function(layerId, i) {
@@ -122,8 +122,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 							brightnessValue : 0
 						});
 						
-						//TODO - Need to update proxyUrl
-						esri.addProxyRule({urlPrefix: thisLayer.url, proxyUrl: '/proxy/proxy.ashx'});
+						esri.addProxyRule({urlPrefix: thisLayer.url, proxyUrl: esriConfig.defaults.io.proxyUrl});
 
 						map.removeLayer(thisLayer);
 						map.addLayer(thisLayerEx, i);
