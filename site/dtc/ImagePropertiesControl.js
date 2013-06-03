@@ -72,12 +72,12 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 				//Check to see if the service is loaded and we can access properties before setting them
 				if (service.loaded === true) {
 					_self._set('imageService', service);
-					_self.resetUI();
+					_self._resetUI();
 					lang.hitch(_self, _self._setChannels(service));
 				} else {
 					service.on('load', function(){
 						_self._set('imageService', service);
-						_self.resetUI();
+						_self._resetUI();
 						lang.hitch(_self, _self._setChannels(service));
 					});
 				}
