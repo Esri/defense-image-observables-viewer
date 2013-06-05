@@ -48,7 +48,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			domConstruct.create("link", {
 				rel : "stylesheet",
 				type : "text/css",
-				href : "dtc/css/imagePropertiesControl.css"
+				href : "dtc/css/ImagePropertiesControl.css"
 			}, document.getElementsByTagName('head')[0]);
 			
 			//Event handlers

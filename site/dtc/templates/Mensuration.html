@@ -1,14 +1,17 @@
 <div data-dojo-attach-point="mensurationRoot" class="mensurationBox">
-	Units:
-	<select name="unitsSelect" data-dojo-attach-point="unitsSelect" data-dojo-type="dijit/form/Select" style="width: 60%; margin:auto">
-		
-	</select>
+	<span class="head3">Mensuration</span>
 	<div data-dojo-attach-point="buttonContainer" align="center"></div>
-	<div style="font-size:small;">
-		<span style="font-weight:bold;">Height:</span><br />
-		<span id="output.MensurationHeight">0</span>
-		<span style="font-size:smaller;">&nbsp;(&plusmn;&nbsp;<span id="output.HeightUncertainty">0.00</span>)&nbsp;</span>
-		<span id="output.LinearUnit"></span>
+	<div class="infoBox">
+		<span>Height:</span>
+		<br />
+		<table>
+			<tr>
+				<td><span id="output.MensurationHeight">0</span><span class="smaller">&nbsp;(&plusmn;&nbsp;<span id="output.HeightUncertainty">0.00</span>)&nbsp;</span></td>
+				<td><select class="unitsSelect" name="unitsSelect" data-dojo-attach-point="unitsSelect" data-dojo-type="dijit/form/Select"></select></td>
+			</tr>
+		</table>
 	</div>
-	<div id="output.info">&nbsp;</div>
+	<div id="output.info">
+		&nbsp;
+	</div>
 </div>

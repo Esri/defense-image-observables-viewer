@@ -1,0 +1,14 @@
+.imageInfoDetail {
+	border-top: 2px solid;
+	border-bottom: 0px solid;
+	padding: 5px; 
+}
+
+.imageInfoDetail > .head3 {
+	display:inline;
+}
+
+.right {
+	float:right;
+}
+

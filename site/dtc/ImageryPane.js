@@ -98,7 +98,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 			domConstruct.create("link", {
 				rel : "stylesheet",
 				type : "text/css",
-				href : "dtc/css/imageryPane.css"
+				href : "dtc/css/ImageryPane.css"
 			}, document.getElementsByTagName('head')[0])
 			
 			//Insert Filters.js

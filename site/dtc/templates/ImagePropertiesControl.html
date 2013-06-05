@@ -1,8 +1,9 @@
-<div data-dojo-attach-point="controlRoot" style="width: 100%" class="controlRoot">
+<div data-dojo-attach-point="controlRoot" class="controlRoot">
+	<span class="head3">Image Adjustment</span>
 	Brightness (<span data-dojo-attach-point="brightnessValue">0</span>):  
 	<div data-dojo-attach-point= "brightnessSlider"
-    style="width:100%;"
     name="brightnessSlider"
+    class="brightnessSlider"
     data-dojo-type="dijit/form/HorizontalSlider"
     data-dojo-props="value:0,
     minimum: -100,
@@ -11,13 +12,11 @@
     intermediateChanges:true,
     showButtons:false">
     </div>
-    
-    
 	
 	Contrast (<span data-dojo-attach-point="contrastValue">0</span>): 
 	<div data-dojo-attach-point= "contrastSlider"
-    style="width:100%;"
     name="contrastSlider"
+    class="contrastSlider"
     data-dojo-type="dijit/form/HorizontalSlider"
     data-dojo-props="value:0,
     minimum: -100,
@@ -28,8 +27,8 @@
 	
 	Gamma (<span data-dojo-attach-point="gammaValue">1.0</span>):
 	<div data-dojo-attach-point= "gammaSlider"
-    style="width:100%;"
     name="gammaSlider"
+    class="gammaSlider"
     data-dojo-type="dijit/form/HorizontalSlider"
     data-dojo-props="value:1,
     minimum: 0.1,
@@ -39,7 +38,7 @@
     showButtons:false"></div>
 
 	
-	<table style="width:100%; border-width: 0px; text-align: center">
+	<table class="channels">
 		<tr>
 			<td>Red</td><td>Green</td><td>Blue</td>
 		</tr>
@@ -49,7 +48,7 @@
 			<td><select data-dojo-attach-point="blueSelect" name="blueSelect" data-dojo-type="dijit/form/Select" class="channelSelect" style="width:50px"></select></td>
 		</tr>
 	</table>
-	<table style="width:100%; border-width: 0px">
+	<table>
 		<tr>
 			<td><input data-dojo-attach-point="DRAcheck" name="DRAcheck" data-dojo-type="dijit/form/CheckBox" class="DRAcheck" /> <label for="DRAcheck">DRA</label></td>
 			<td align="right"><button data-dojo-attach-point="resetButton" data-dojo-type="dijit/form/Button" class="resetButton">Reset</button></td>
