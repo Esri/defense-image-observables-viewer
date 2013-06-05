@@ -20,6 +20,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 		imageControls : null,
 		mensuration : null,
 		measure : null,
+		imageInfoDetail: null,
 
 		constructor : function(options, srcRefNode) {
 			declare.safeMixin(this.options, options);
@@ -102,7 +103,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 			
 			//Insert Filters.js
 
-			require(['esrix/layers/ArcGISImageServiceLayerEx', 'dojo/data/ObjectStore', 'dojo/store/Memory', 'dojo/on', "dtc/ImagePropertiesControl", "dtc/Mensuration"], function(ImageLayerEx, ObjectStore, Memory, on, ImagePropertiesControl, Mensuration) {
+			require(['esrix/layers/ArcGISImageServiceLayerEx', 'dojo/data/ObjectStore', 'dojo/store/Memory', 'dojo/on', "dtc/ImagePropertiesControl", "dtc/Mensuration", "dtc/ImageInfoDetail"], function(ImageLayerEx, ObjectStore, Memory, on, ImagePropertiesControl, Mensuration, ImageInfoDetail) {
 				/* Scan the map for image service layers
 				 * 1) Replace the Image Service Layer with extended image services supporting brightness/contrast preserving layer order
 				 * 2) Reset the declaredClass to esri.layers.ArcGISImageServiceLayer in case any code is checking the class value 
@@ -167,15 +168,23 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 					map : _self.map
 				}, "mensurationTools")//.placeAt(_self.imagePaneRoot);
 				_self.mensuration.startup();
+				
+				_self.imageInfoDetail = new ImageInfoDetail({
+					map: _self.map
+				}, "imageInfoDetails");
+				_self.imageInfoDetail.startup();
 
 				//Assign default Image Service
 				_self.imagePropertiesControl.set('imageService', _self.selectedImageService);
 				_self.mensuration.set('imageService', _self.selectedImageService);
+				_self.imageInfoDetail.set('imageService', _self.selectedImageService);
+				
 
 				//Update the widgets when the selected image service changes
 				_self.imageSelect.on("change", function(newValue) {
 					_self.imagePropertiesControl.set('imageService', newValue);
 					_self.mensuration.set('imageService', newValue);
+					_self.imageInfoDetail.set('imageService', newValue);
 				});
 			});
 

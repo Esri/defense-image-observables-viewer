@@ -1,3 +1,4 @@
 .sidePane {
 	background-color: #EEE;
+	overflow-y: scroll;
 }
