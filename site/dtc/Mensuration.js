@@ -17,7 +17,16 @@
  *
  */
 
-define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/Mensuration.html", "dijit/form/Select", "dojo/dom", "dojo/dom-attr", "dojo/dom-construct", "dijit/registry"], function(declare, connect, array, lang, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, dom, domAttr, domConstruct, registry) {
+define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", 
+		"dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", 
+		"dojo/text!./templates/Mensuration.html", 
+		"dijit/form/Select", "dijit/form/DropDownButton", 
+		"dojo/dom", "dojo/dom-attr", "dojo/dom-construct", "dijit/registry"], 
+		function(	declare, connect, array, lang, 
+					_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, 
+					dijitTemplate, 
+					Select, ToggleButton,
+					dom, domAttr, domConstruct, registry) {
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		declaredClass : "dtc.Mensuration",
 		templateString : dijitTemplate,
@@ -114,7 +123,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			domConstruct.create("link", {
 				rel : "stylesheet",
 				type : "text/css",
-				href : "dtc/css/mensuration.css"
+				href : "dtc/css/Mensuration.css"
 			}, document.getElementsByTagName('head')[0]);
 
 			//Instantiate the draw toolbar and have it perform a measurement when the line is completed
@@ -127,7 +136,24 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			//Add the Units to the Select and set the default
 			_self.unitsSelect.addOption(_self._UNITS);
 			_self.units = 'esriMeters';
-
+			
+			/*
+			//Add Units to the dropdown button
+			require(["dijit/DropDownMenu", "dijit/MenuItem"], function(DropDownMenu, MenuItem){
+				var unitMenu = new DropDownMenu();
+				array.forEach(_self._UNITS, function(thisUnit){
+					var thisUnitItem = new MenuItem({
+						label: thisUnit.label,
+						onClick: function(){_self.units = thisUnit.value; _self.measureBuilding(null);}
+					});
+					console.log(thisUnitItem);
+					unitMenu.addChild(thisUnitItem);
+				});
+				console.log(unitMenu);
+				_self.btnUnits.set('dropdown', unitMenu);
+				console.log(_self.btnUnits);
+			});
+*/
 			//When we change the units, update the units and fire off a new mensuration request to update the result
 			_self.unitsSelect.on("change", function(newValue) {
 				_self.units = newValue;
@@ -241,7 +267,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			require(['dojo/number'], function(number) {
 				domAttr.set('output.MensurationHeight', "innerHTML", number.format(Math.abs(measurement.value), numFormat));
 				domAttr.set('output.HeightUncertainty', "innerHTML", number.format(measurement.uncertainty, numFormat));
-				domAttr.set('output.LinearUnit', "innerHTML", measurement.unit.replace("esri", ""));
+				//domAttr.set('output.LinearUnit', "innerHTML", measurement.unit.replace("esri", ""));
 			});
 			// DISPLAY MEASUREMENT GRAPHICS //
 			//addMeasurementGraphic(userLine, measurement);
@@ -257,7 +283,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			// RESET MEASUREMENT UI //
 			domAttr.set('output.MensurationHeight', "innerHTML", '0.00');
 			domAttr.set('output.HeightUncertainty', "innerHTML", '0.00');
-			domAttr.set('output.LinearUnit', "innerHTML", '');
+			//domAttr.set('output.LinearUnit', "innerHTML", '');
 			domAttr.set('output.info', "innerHTML", '');
 		}
 	});
