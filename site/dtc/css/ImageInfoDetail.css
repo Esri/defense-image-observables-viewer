@@ -5,10 +5,28 @@
 }
 
 .imageInfoDetail > .head3 {
-	display:inline;
+	display:block;
+}
+
+.imageInfoDetail > .imageDetails > .details {
+	width: 200px;
+}
+
+.imageInfoDetail > .imageDetails > .details .field {
+	font-weight: bold
+}
+
+.imageInfoDetail > .imageDetails > .details .value {
+	text-align: right
+	font-style: italic
 }
 
 .right {
 	float:right;
 }
 
+.iconIdentify {
+    background: url("../assets/crosshair.png") no-repeat scroll center center transparent;
+    height: 18px;
+    width: 18px;
+}
