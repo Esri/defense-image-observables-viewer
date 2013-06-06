@@ -1,13 +1,31 @@
+.controlRoot {
+	border-top: 2px solid;
+	border-bottom: 0px solid;
+	padding: 5px; 
+}
+.controlRoot > .head3 {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+
 .controlRoot > .dijitSlider {
 	margin-top: 5px;
 	margin-bottom: 15px;
 }
 
+.controlRoot > table {
+	width:100%; 
+	border-width: 0px; 	
+}
+
+.controlRoot > table.channels {
+	text-align: center
+}
+
 .DRAcheck {
-	margin-left: 5px !important;
 }
 
 .resetButton {
-	margin-right: 5px;
 	right: 0px;
 }
