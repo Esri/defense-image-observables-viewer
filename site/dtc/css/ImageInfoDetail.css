@@ -8,24 +8,39 @@
 	display:block;
 }
 
+.imageInfoDetail > .imageDetails {
+	margin-bottom: 20%;
+}
+
 .imageInfoDetail > .imageDetails > .details {
-	width: 200px;
+	width: 187px;
 }
 
 .imageInfoDetail > .imageDetails > .details .field {
-	font-weight: bold
+	display:block;
+	font-weight: bold;
 }
 
 .imageInfoDetail > .imageDetails > .details .value {
-	text-align: right
-	font-style: italic
+	display:block;
+	width:187px;
+	font-style: italic;
+	margin-bottom: 6px;
+	word-wrap: break-word;
 }
 
 .right {
 	float:right;
 }
 
+.imageInfoDetail .esriButton, .imageInfoDetail .esriButton > span {
+	width: 26px !important;
+	height:26px !important;
+	margin-bottom: 6px;
+}
+
 .iconIdentify {
+	margin-left: 4px;
     background: url("../assets/crosshair.png") no-repeat scroll center center transparent;
     height: 18px;
     width: 18px;

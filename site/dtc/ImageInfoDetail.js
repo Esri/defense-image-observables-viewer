@@ -16,7 +16,7 @@
 define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", "dojo/on",
 "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", 
 "dojo/text!./templates/ImageInfoDetail.html", 
-"dijit/form/Button","dijit/form/CheckBox",
+"dijit/form/ToggleButton","dijit/form/CheckBox",
 "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dijit/registry"], 
 function(declare, connect, array, lang, on,
 	_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, 
@@ -130,10 +130,10 @@ function(declare, connect, array, lang, on,
 			this._updateInfo(e.mapPoint);
 		},
 		
-		//Based on the inpu point, run an identify against the selected image service
+		//Based on the input point, run an identify against the selected image service
 		_updateInfo: function(point) {
 			var _self = this;
-			lang.hitch(_self, _self._clearInfo);
+			_self._clearInfo();
 			if (_self.imageService == null) {
 				_self.updateError('No image service selected');
 				return
@@ -172,7 +172,7 @@ function(declare, connect, array, lang, on,
 			_self.graphics.add(thisImage);
 			
 			//and insert the text
-			var htmlText = "<table class='details'>";
+			var htmlText = "<div class='details'>";
 			_self.copyText = "";
 			
 			var fieldNames = Object.keys(_self.fields)
@@ -193,8 +193,8 @@ function(declare, connect, array, lang, on,
 						v = String(thisImage.attributes[name])
 					}
 					//add to our outputs
-					htmlText +="<tr><td class='field'>"+ l + ":</td></tr>"
-					htmlText += "<tr><td class='value'>"+ v + "</td></tr>"
+					htmlText +="<span class='field'>"+ l + ":</span>"
+					htmlText += "<span class='value'>"+ v + "</span>"
 					_self.copyText += l + '\t' + v + '\n';
 				}
 			});

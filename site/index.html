@@ -49,6 +49,7 @@
 
     <script type="text/javascript" src="javascript/layout.js">
     </script>
+    <!-- JT - add in ArcGISImageLayerEx's Filters.js -->
     <script type="text/javascript" src="esrix/layers/Filters.js"></script>
     <script type="text/javascript">
       dojo.require("utilities.App");
@@ -63,9 +64,9 @@
         i18n = dojo.i18n.getLocalization("esriTemplate","template");
         var  defaults = {
         //The ID for the map from ArcGIS.com
-        webmap: "1a2394ccef5b46bfb237462f69fed0ad",
+        webmap: "3aede4005a1142c7ac88f2ac9b0b92d4",
         //Modify this to point to your sharing service URL if you are using the portal
-        sharingurl: null,//for example: "http://www.arcgis.com",
+        sharingurl: 'http://aficomport.esri.com',//for example: "http://www.arcgis.com",
         //The id for the web mapping application item that contains configuration info - in most
         ////When editing you need to specify a proxyurl (see below) if the service is on a different domain
         //Specify a proxy url if you will be editing, using the elevation profile or have secure services or web maps that are not shared with everyone.
