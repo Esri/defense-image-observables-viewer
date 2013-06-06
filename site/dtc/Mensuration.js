@@ -137,23 +137,6 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			_self.unitsSelect.addOption(_self._UNITS);
 			_self.units = 'esriMeters';
 			
-			/*
-			//Add Units to the dropdown button
-			require(["dijit/DropDownMenu", "dijit/MenuItem"], function(DropDownMenu, MenuItem){
-				var unitMenu = new DropDownMenu();
-				array.forEach(_self._UNITS, function(thisUnit){
-					var thisUnitItem = new MenuItem({
-						label: thisUnit.label,
-						onClick: function(){_self.units = thisUnit.value; _self.measureBuilding(null);}
-					});
-					console.log(thisUnitItem);
-					unitMenu.addChild(thisUnitItem);
-				});
-				console.log(unitMenu);
-				_self.btnUnits.set('dropdown', unitMenu);
-				console.log(_self.btnUnits);
-			});
-*/
 			//When we change the units, update the units and fire off a new mensuration request to update the result
 			_self.unitsSelect.on("change", function(newValue) {
 				_self.units = newValue;
@@ -198,6 +181,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			return (this.imageService.id)
 		},
 
+		//Detect whether the image service supports mensuration
 		_buttonSet : function(service) {
 			var isNotMensurable = true;
 			if (service.hasOwnProperty('capabilities')) {
@@ -211,6 +195,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			});
 		},
 
+		//Begin measurement- change the cursor and show the line being drawn
 		drawBuildingHeight : function(method) {
 			this.resetHeights();
 			this.measureMethod = method;
@@ -220,7 +205,6 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 		},
 
 		measureBuilding : function(result) {
-			console.log('measureBuilding');
 			var _self = this;
 			this.drawToolbar.deactivate();
 			var imageServiceLayer = this.imageService.url;
@@ -267,10 +251,8 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			require(['dojo/number'], function(number) {
 				domAttr.set('output.MensurationHeight', "innerHTML", number.format(Math.abs(measurement.value), numFormat));
 				domAttr.set('output.HeightUncertainty', "innerHTML", number.format(measurement.uncertainty, numFormat));
-				//domAttr.set('output.LinearUnit', "innerHTML", measurement.unit.replace("esri", ""));
 			});
 			// DISPLAY MEASUREMENT GRAPHICS //
-			//addMeasurementGraphic(userLine, measurement);
 			this.map.setMapCursor('default');
 
 		},
@@ -283,7 +265,6 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 			// RESET MEASUREMENT UI //
 			domAttr.set('output.MensurationHeight', "innerHTML", '0.00');
 			domAttr.set('output.HeightUncertainty', "innerHTML", '0.00');
-			//domAttr.set('output.LinearUnit', "innerHTML", '');
 			domAttr.set('output.info', "innerHTML", '');
 		}
 	});
