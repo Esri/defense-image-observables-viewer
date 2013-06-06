@@ -15,10 +15,6 @@
 	padding-top: 10px;
 }
 
-.mensurationBox > .infoBox > span {
-	font-weight: bold;
-}
-
 .mensurationBox > .infoBox > table {
 	width: 100%;
 	text-align: right 
