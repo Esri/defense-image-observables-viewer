@@ -151,7 +151,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_b
 							_self.drawBuildingHeight(option.method);
 						}),
 						title : option.title,
-						iconClass : option.iconClass
+						iconClass : option.iconClass,
 					}).placeAt(_self.buttonContainer);
 				});
 			});

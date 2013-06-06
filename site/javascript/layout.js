@@ -935,6 +935,7 @@ function updatePrint(templates){
     dojo.byId('webmap-toolbar-center').appendChild(printer.printDomNode);
 
     printer.startup();
+
 }
 //create a floating pane to hold the measure widget and add a button to the toolbar
 //that allows users to hide/show the measurement widget.
