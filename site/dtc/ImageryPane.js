@@ -20,7 +20,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 		imageControls : null,
 		mensuration : null,
 		measure : null,
-		imageInfoDetail: null,
+		imageInfoDetail : null,
 
 		constructor : function(options, srcRefNode) {
 			declare.safeMixin(this.options, options);
@@ -74,7 +74,11 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 				esriConfig.defaults.io.alwaysUseProxy = true;
 
 				//Set up the Web Worker
-				esriConfig.defaults.esrix = {'layers':{'ipBgWwProc':"./esrix/layers/IPBgWebWorkerProc.js"}};
+				esriConfig.defaults.esrix = {
+					'layers' : {
+						'ipBgWwProc' : "./esrix/layers/IPBgWebWorkerProc.js"
+					}
+				};
 
 				//Wait for the map to load and then initialize
 				if (_self.map.loaded) {
@@ -100,13 +104,13 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 				type : "text/css",
 				href : "dtc/css/ImageryPane.css"
 			}, document.getElementsByTagName('head')[0])
-			
+
 			//Insert Filters.js
 
 			require(['esrix/layers/ArcGISImageServiceLayerEx', 'dojo/data/ObjectStore', 'dojo/store/Memory', 'dojo/on', "dtc/ImagePropertiesControl", "dtc/Mensuration", "dtc/ImageInfoDetail"], function(ImageLayerEx, ObjectStore, Memory, on, ImagePropertiesControl, Mensuration, ImageInfoDetail) {
 				/* Scan the map for image service layers
 				 * 1) Replace the Image Service Layer with extended image services supporting brightness/contrast preserving layer order
-				 * 2) Reset the declaredClass to esri.layers.ArcGISImageServiceLayer in case any code is checking the class value 
+				 * 2) Reset the declaredClass to esri.layers.ArcGISImageServiceLayer in case any code is checking the class value
 				 * 3) Add them to the set of image services to eventually populate the dropdown
 				 */
 				array.forEach(_self.map.layerIds, function(layerId, i) {
@@ -114,26 +118,31 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 					if (thisLayer.declaredClass === "esri.layers.ArcGISImageServiceLayer") {
 						var thisLayerEx = new ImageLayerEx(thisLayer.url, {
 							//Using the same ID
-							id: thisLayer.id,
+							id : thisLayer.id,
 							//Resetting declaredClass in case any code actually checks for the class
 							declaredClass : "esri.layers.ArcGISImageServiceLayer",
 							//We're getting the title from the arcgisProps property specific to web map layers
-							arcgisProps : thisLayer.arcgisProps, 
+							arcgisProps : thisLayer.arcgisProps,
 							contrastValue : 0,
 							brightnessValue : 0
 						});
-						
-						esri.addProxyRule({urlPrefix: thisLayer.url, proxyUrl: esriConfig.defaults.io.proxyUrl});
+
+						esri.addProxyRule({
+							urlPrefix : thisLayer.url,
+							proxyUrl : esriConfig.defaults.io.proxyUrl
+						});
 
 						map.removeLayer(thisLayer);
 						map.addLayer(thisLayerEx, i);
 						//Update the Layer List to work with the new layer
-						array.forEach(registry.byId('layerMenu').getChildren(), function(menuItem){
+						array.forEach(registry.byId('layerMenu').getChildren(), function(menuItem) {
 							if (menuItem.label === thisLayerEx.arcgisProps.title) {
-								menuItem.onChange = function(){thisLayerEx.setVisibility(!thisLayerEx.visible)}
+								menuItem.onChange = function() {
+									thisLayerEx.setVisibility(!thisLayerEx.visible)
+								}
 							}
 						});
-						
+
 						_self.imageServices.push({
 							label : thisLayerEx.arcgisProps.title,
 							id : thisLayerEx.id
@@ -168,9 +177,9 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 					map : _self.map
 				}, "mensurationTools")//.placeAt(_self.imagePaneRoot);
 				_self.mensuration.startup();
-				
+
 				_self.imageInfoDetail = new ImageInfoDetail({
-					map: _self.map
+					map : _self.map
 				}, "imageInfoDetails");
 				_self.imageInfoDetail.startup();
 
@@ -178,7 +187,6 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 				_self.imagePropertiesControl.set('imageService', _self.selectedImageService);
 				_self.mensuration.set('imageService', _self.selectedImageService);
 				_self.imageInfoDetail.set('imageService', _self.selectedImageService);
-				
 
 				//Update the widgets when the selected image service changes
 				_self.imageSelect.on("change", function(newValue) {
