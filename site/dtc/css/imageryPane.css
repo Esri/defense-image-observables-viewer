@@ -40,6 +40,13 @@
 	margin-left:5px;
 }
 
+#measureSurround .resultLabel {
+	font-size: 1em;
+	padding-left: 0px;
+	position:relative;
+	left: -3px
+}
+
 /*
  * Specific UI settings
  */
