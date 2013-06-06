@@ -1680,7 +1680,8 @@ function createElevationProfileTools() {
 //JT Code additions for Imagery Pane here
 
 function addImageryPane(){
-	esri.show(dojo.byId('rightPane'));
+	
+	dojo.style(dojo.byId('rightPane'), "width", "220px");
 	require(["dtc/ImageryPane"], function(ImageryPane){
 		var IP = new ImageryPane({'map':map}, "imgPane");
 		IP.startup();
