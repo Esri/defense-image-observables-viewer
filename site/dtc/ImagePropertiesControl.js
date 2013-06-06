@@ -1,16 +1,27 @@
 /*
  * ImagePropertiesControl
  * James Tedrick (DTC)
- * 5/10/2013
  * 
+ * Declaration syntax:
+ * require(['dtc/ImagePropertiesControl], function(ImagePropertiesControl){
+ * 	new ImagePropertiesControl({map: <esri.Map>, imageService: <esri.layers.ArcGISImageServiceLayer>}, <string|domNode>domNode)
+ * });
+ *
+ * Note: 	This control *assumes* the layers are esrix/layers/ArcGISImageServiceLayerEx & your browser supports canvas
+ * 		  	Otherwise, brightness and contrast *will not* work.
+ * 
+ * Resources used by this widget:
+ * 		-templates/ImagePropertiesControl.html
+ * 		-css/ImagePropertiesControl.css
  */
 
-define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin",
+define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", 
+"dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin",
 "dojo/text!./templates/ImagePropertiesControl.html", 
 "dijit/form/HorizontalSlider", "dijit/form/Select", "dijit/form/CheckBox", "dijit/form/Button", 
 "esri/layers/RasterFunction", 
 "dojo/dom-construct" 
-], function(declare, connect, array, lang, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, 
+], function(declare, array, lang, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, 
 	HorizontalSlider, Select, CheckBox, Button,
 	RasterFunction,
 	domConstruct ) {
