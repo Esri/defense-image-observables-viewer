@@ -1,12 +1,12 @@
-define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", 
+define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", "dojo/on",
 "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", 
 "dojo/text!./templates/ImageInfoDetail.html", 
-"dijit/form/Button",
+"dijit/form/Button","dijit/form/CheckBox",
 "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dijit/registry"], 
-function(declare, connect, array, lang,
+function(declare, connect, array, lang, on,
 	_WidgetBase,   _TemplatedMixin, _WidgetsInTemplateMixin, 
 	dijitTemplate, 
-	Button,
+	Button, CheckBox,
 	dom, domStyle, domConstruct, registry) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -18,6 +18,7 @@ function(declare, connect, array, lang,
 		imageService: null,
 		imageOutline: null,
 		fields: null,
+		copyText: null,
 		
 		constructor: function(options, srcRefNode) {
 			declare.safeMixin(this.options, options);
@@ -74,15 +75,31 @@ function(declare, connect, array, lang,
 			});
 			
 			//On an extent change, get the map center point and update the mosaic detail information
-			_self.map.on('extent-change', //function(){
-				//console.log('map update');
-				lang.hitch(_self, _self._updateInfo)
-			);
-			//});			
+			_self.map.on('extent-change', lang.hitch(_self, _self._onExtentChange));
+			_self.btnIdentify.on('click', lang.hitch(_self, _self._startIdentify));
+			_self.chkFootprint.on('change', lang.hitch(_self, _self._toggleFootprint));
 		},
 		
-		_updateInfo: function() {
-			console.log('updateInfo');
+		_onExtentChange: function() {
+			var _self = this;
+			if(this.chkAutoUpdate.get('value') === 'on') {
+				var point = _self.map.extent.getCenter();
+				_self._updateInfo(point);
+			}
+		},
+		
+		_startIdentify: function() {
+			var _self = this;
+			_self.map.setMapCursor('crosshair');
+			on.once(this.map, 'click', lang.hitch(_self, _self._onIdentifyClick));
+		},
+		_onIdentifyClick: function(e) {
+			this.map.setMapCursor('default');
+			console.log(e);
+			this._updateInfo(e.mapPoint);
+		},
+		
+		_updateInfo: function(point) {
 			var _self = this;
 			lang.hitch(_self, _self._clearInfo);
 			if (_self.imageService == null) {return};
@@ -90,7 +107,7 @@ function(declare, connect, array, lang,
 			//Identify on the center of the map
 			require(["esri/tasks/ImageServiceIdentifyParameters", "esri/tasks/ImageServiceIdentifyTask", ], function(ImageServiceIdentifyParameters, ImageServiceIdentifyTask){
 				var params = new ImageServiceIdentifyParameters();
-				params.geometry = _self.map.extent.getCenter();
+				params.geometry = point;
 				params.mosaicRule = (_self.imageService.mosaicRule === null) ? _self.imageService.defaultMosaicRule : _self.imageService.mosaicRule; 
 				params.returnGeometry = true;
 				if (_self.map.timeExtent) {
@@ -98,22 +115,17 @@ function(declare, connect, array, lang,
 				}
 				var task = new ImageServiceIdentifyTask(_self.imageService.url);
 				task.execute(params, lang.hitch(_self, _self._updateResult), lang.hitch(_self, _self._updateError));
-				
 			});
 		},
 		
 		_updateResult: function(result) {
 			var _self = this;
-			
-			console.log(_self.imageService);
-			console.log(result);
 
 			//Find the visible image from the catalog results
 			var visibleItem;
 			array.forEach(result.catalogItemVisibilities, function(isVis, index){
 				if (isVis === 1) visibleItem = index;
 			});
-			console.log
 			if (visibleItem == null) {
 				//TODO Add Error Info
 				return
@@ -123,11 +135,10 @@ function(declare, connect, array, lang,
 			var thisImage = result.catalogItems.features[visibleItem];
 			thisImage.setSymbol(_self.imageOutline);
 			_self.graphics.add(thisImage);
-			_self.graphics.setVisibility(true);
 			
 			//and insert the text
-			var htmlText = "";
-			var copyText = "";
+			var htmlText = "<table class='details'>";
+			_self.copyText = "";
 			
 			var fieldNames = Object.keys(_self.fields)
 			var excludeFields = [result.catalogItems.objectIdFieldName, 'Shape', 'Shape_Area', 'Shape_Length']
@@ -147,10 +158,14 @@ function(declare, connect, array, lang,
 						v = String(thisImage.attributes[name])
 					}
 					//add to our outputs
-					copyText += l + '\t' + v + '\n';
-
+					htmlText +="<tr><td class='field'>"+ l + ":</td></tr>"
+					htmlText += "<tr><td class='value'>"+ v + "</td></tr>"
+					_self.copyText += l + '\t' + v + '\n';
 				}
 			});
+			//Add details to the DOM
+			htmlText += '</table>'
+			_self.imageDetails.innerHTML = htmlText;
 		},
 		
 		_clearInfo: function() {
@@ -160,6 +175,10 @@ function(declare, connect, array, lang,
 		
 		_updateError: function(error) {
 			console.log(error);
+		},
+		
+		_toggleFootprint: function(){
+			this.graphics.setVisibility(this.chkFootprint.get('value') == 'on')
 		},
 		
 		//Custom setter for the imageService variable

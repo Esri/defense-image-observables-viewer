@@ -1,12 +1,14 @@
 <div class="imageInfoDetail">
-	<span class="head3">
-		Image Details
-		<span class="right">
-			<button data-dojo-attach-point="btnCopy" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconCopy',title:'Copy to Clipboard'"></button>
-		</span>
-	</span>
+	<span class="head3"> Image Details </span>
+	<button data-dojo-attach-point="btnIdentify" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'iconIdentify',title:'Identify Image'"></button>
+	<button data-dojo-attach-point="btnCopy" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconCopy',title:'Copy to Clipboard'"></button>
+	<br />
+	<input type="checkbox" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="chkAutoUpdate" name="chkAutoUpdate" checked="checked" />
+	<label for="chkAutoUpdate">Update with map? (Details for the center of the map)</label>
+	<br/>
+	<input type="checkbox" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="chkFootprint" name="chkFootprint" />
+	<label for="chkFootprint">Show Footprint</label>
 	<div class="imageDetails" data-dojo-attach-point="imageDetails">
-		
-		
+
 	</div>
 </div>
