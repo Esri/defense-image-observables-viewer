@@ -1,4 +1,50 @@
+/*
+ * Basic Box models
+ */
 .sidePane {
 	background-color: #EEE;
-	overflow-y: scroll;
+	height:100%;
+	width:100%;
 }
+
+#imageTools {
+	width: 100%;
+	height:95%;
+	overflow-y: scroll;
+	overflow-x:hidden;	
+}
+
+#imageServiceProps #mensurationTools #measureDiv #imageInfoDetails {
+	width:90%;
+} 
+
+
+/*
+ * Headings
+ */
+.sidePane .head2 {
+	font-size: 1.4em;
+	font-weight:bold;
+	text-align:center;
+	display:block;
+	padding-top:2px;
+	padding-bottom:5px;
+}
+
+.sidePane .head3 {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#measureSurround > .head3 {
+	margin-left:5px;
+}
+
+/*
+ * Specific UI settings
+ */
+.sidePane .selectBox {
+	margin: 5px;
+	width: 190px;
+}
+
