@@ -1,10 +1,25 @@
+/*
+ * Image Information Details Widget
+ * 
+ * Declaration Syntax:
+ * require(['dtc/ImageInfoDetails], function(ImageInfoDetails){
+ * 	new ImageInfoDetails({map: <esri.Map>, imageService: <esri.layers.ArcGISImageServiceLayer>}, <string|domNode>domNode)
+ * });
+ * 
+ * Resources used by this widget:
+ * 		-templates/ImageInfoDetails.html
+ * 		-css/ImageInfoDetails.css
+ * 		-assets/crosshair.png
+ * 
+ */
+
 define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dojo/_base/lang", "dojo/on",
 "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", 
 "dojo/text!./templates/ImageInfoDetail.html", 
 "dijit/form/Button","dijit/form/CheckBox",
 "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dijit/registry"], 
 function(declare, connect, array, lang, on,
-	_WidgetBase,   _TemplatedMixin, _WidgetsInTemplateMixin, 
+	_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, 
 	dijitTemplate, 
 	Button, CheckBox,
 	dom, domStyle, domConstruct, registry) {
@@ -13,13 +28,19 @@ function(declare, connect, array, lang, on,
 		declaredClass : "dtc.ImageInfoDetail",
 		templateString : dijitTemplate,
 		options: {map: null, imageService: null},
-		graphics:null,
+		//map: esri.Map
 		map: null,
+		//imageService: esri.layers.ArcGISImageServiceLayer
 		imageService: null,
+		//graphics: esri.layers.GraphicsLayer
+		graphics:null,
+		//imageOutline: esri.Graphic (footprint of image)
 		imageOutline: null,
+		//fields: String[]
 		fields: null,
+		//copyText: string
 		copyText: null,
-		
+
 		constructor: function(options, srcRefNode) {
 			declare.safeMixin(this.options, options);
 
@@ -50,6 +71,7 @@ function(declare, connect, array, lang, on,
 			
 		},
 		
+		//Initialization code (called by startup once the map is loaded)
 		_init: function() {
 			var _self = this;
 			
@@ -74,35 +96,48 @@ function(declare, connect, array, lang, on,
 					new Color([255,255,0, 0.25]));
 			});
 			
+			/*
+			 * Event Handlers
+			 */
 			//On an extent change, get the map center point and update the mosaic detail information
 			_self.map.on('extent-change', lang.hitch(_self, _self._onExtentChange));
+			//Allow the user to click on the map and get image info
 			_self.btnIdentify.on('click', lang.hitch(_self, _self._startIdentify));
+			//Toggle the footprint on/off
 			_self.chkFootprint.on('change', lang.hitch(_self, _self._toggleFootprint));
+			//Copy/download the metadata text.  Stubbed for future use
+			//_self.btnCopy.on('click', lang.hitch(_self, _self._getData));
 		},
 		
+		//Get the new center of the map and send the point to _updateInfo
 		_onExtentChange: function() {
-			var _self = this;
 			if(this.chkAutoUpdate.get('value') === 'on') {
-				var point = _self.map.extent.getCenter();
-				_self._updateInfo(point);
+				var point = this.map.extent.getCenter();
+				this._updateInfo(point);
 			}
 		},
 		
+		//Modify the cursor and set up the response for a map click
 		_startIdentify: function() {
 			var _self = this;
 			_self.map.setMapCursor('crosshair');
 			on.once(this.map, 'click', lang.hitch(_self, _self._onIdentifyClick));
 		},
+		
+		//Revert the cursor and send the point to _updateInfo
 		_onIdentifyClick: function(e) {
 			this.map.setMapCursor('default');
-			console.log(e);
 			this._updateInfo(e.mapPoint);
 		},
 		
+		//Based on the inpu point, run an identify against the selected image service
 		_updateInfo: function(point) {
 			var _self = this;
 			lang.hitch(_self, _self._clearInfo);
-			if (_self.imageService == null) {return};
+			if (_self.imageService == null) {
+				_self.updateError('No image service selected');
+				return
+			};
 			
 			//Identify on the center of the map
 			require(["esri/tasks/ImageServiceIdentifyParameters", "esri/tasks/ImageServiceIdentifyTask", ], function(ImageServiceIdentifyParameters, ImageServiceIdentifyTask){
@@ -127,7 +162,7 @@ function(declare, connect, array, lang, on,
 				if (isVis === 1) visibleItem = index;
 			});
 			if (visibleItem == null) {
-				//TODO Add Error Info
+				_self._updateError("No images found.")
 				return
 			}
 
@@ -146,7 +181,7 @@ function(declare, connect, array, lang, on,
 				if (excludeFields.indexOf(name)< 0){
 					var l = _self.fields[name]['alias'];
 					var v;
-					//If it's a coded value domain, use it
+					//If it's a coded value domain, use the domain value
 					if (_self.fields[name].domain !== null && _self.fields[name].domain.type === 'codedValue') {
 						array.forEach(_self.fields[name].domain.codedValues, function(codedValue){
 							if (codedValue.code === thisImage.attributes[name]) {
@@ -168,19 +203,29 @@ function(declare, connect, array, lang, on,
 			_self.imageDetails.innerHTML = htmlText;
 		},
 		
+		//Clear out the information on a new request
 		_clearInfo: function() {
-			_self.graphics.clear();
-			_self.imageDetails.innerHTML = "";
+			this.graphics.clear();
+			this.copyText = ""
+			this.imageDetails.innerHTML = "";
 		},
 		
+		//Present the error to the user
 		_updateError: function(error) {
+			this.imageDetails.innerHTML = "An error has occured.<br />" + error
 			console.log(error);
 		},
 		
+		//Turn the footprint or off
 		_toggleFootprint: function(){
 			this.graphics.setVisibility(this.chkFootprint.get('value') == 'on')
 		},
 		
+		//_getData: copy/download the metadata text.  Stubbed for future use
+		_getData: function(){
+			
+		},
+				
 		//Custom setter for the imageService variable
 		_setImageServiceAttr : function(/*string (ID)*/serviceID) {
 			var _self = this;
@@ -188,11 +233,9 @@ function(declare, connect, array, lang, on,
 			//Get the service from the map
 			if (serviceID) {
 				service = this.map.getLayer(serviceID);
-			
-			
 				//Conduct a query to get the field info (they do not come with identify)
 				require(["esri/tasks/query", "esri/tasks/QueryTask"], function(Query, Task){
-					var q = new Query;
+					var q = new Query();
 					//We don't need actually results, just the overhead
 					q.where = '1=0';
 					q.returnGeometry = false;
@@ -216,8 +259,5 @@ function(declare, connect, array, lang, on,
 		_getImageServiceAttr : function() {
 			return (this.imageService.id)
 		},
-		
-		
-
 	});
 });

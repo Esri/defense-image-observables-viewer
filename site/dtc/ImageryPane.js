@@ -1,10 +1,26 @@
 /*
  * Imagery Pane for Basic Viewer
- * James Tedrick (DTC)
- * 05/10/2013
+ * 
+ * Declaration syntax:
+ * require(['dtc/ImageryPane], function(ImageryPane){
+ * 	new ImageryPane({map: <esri.Map>, <string|domNode>domNode)
+ * });
+ * 
+ * Requires HTML 5 canvas support (IE9+, FF, Chrome, Safari)
+ *
+ * Widgets used by this widget:
+ * 		-dtc/ImageInfoDetail
+ * 		-dtc/ImagePropertiesControl
+ * 		-dtc/Mensuration
+ * 		-esrix/layers/ArcGISImageServiceLayerEx
+ * 
+ * Resources used by this widget:
+ * 		-templates/ImagePane.html
+ * 		-css/ImagePane.css
+ * 
  */
 
-define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImageryPane.html", 'dijit/form/Select', "esri/config", "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dijit/registry"], function(declare, connect, array, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, esriConfig, dom, domStyle, domConstruct, registry) {
+define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImageryPane.html", 'dijit/form/Select',"esri/config","dojo/dom-construct", "dijit/registry"], function(declare, connect, array, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, Select, esriConfig, domConstruct, registry) {
 
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		declaredClass : "dtc.ImageryPane",
@@ -107,8 +123,11 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 
 			//Insert Filters.js
 
-			require(['esrix/layers/ArcGISImageServiceLayerEx', 'dojo/data/ObjectStore', 'dojo/store/Memory', 'dojo/on', "dtc/ImagePropertiesControl", "dtc/Mensuration", "dtc/ImageInfoDetail"], function(ImageLayerEx, ObjectStore, Memory, on, ImagePropertiesControl, Mensuration, ImageInfoDetail) {
-				/* Scan the map for image service layers
+			require(['esrix/layers/ArcGISImageServiceLayerEx', 'dojo/data/ObjectStore', 'dojo/store/Memory', "esri/urlUtils", "dtc/ImagePropertiesControl", "dtc/Mensuration", "dtc/ImageInfoDetail"], function(ImageLayerEx, ObjectStore, Memory, urlUtils, ImagePropertiesControl, Mensuration, ImageInfoDetail) {
+				/* 
+				 * Load Image Services
+				 * 
+				 * Scan the map for image service layers
 				 * 1) Replace the Image Service Layer with extended image services supporting brightness/contrast preserving layer order
 				 * 2) Reset the declaredClass to esri.layers.ArcGISImageServiceLayer in case any code is checking the class value
 				 * 3) Add them to the set of image services to eventually populate the dropdown
@@ -126,14 +145,17 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 							contrastValue : 0,
 							brightnessValue : 0
 						});
-
-						esri.addProxyRule({
+						
+						//Canvas has the cross-domain restrictions; add the source to the proxy rules
+						urlUtils.addProxyRule({
 							urlPrefix : thisLayer.url,
 							proxyUrl : esriConfig.defaults.io.proxyUrl
 						});
 
+						//Replace the image service with with ArcGISImageServiceEx version in place
 						map.removeLayer(thisLayer);
 						map.addLayer(thisLayerEx, i);
+						
 						//Update the Layer List to work with the new layer
 						array.forEach(registry.byId('layerMenu').getChildren(), function(menuItem) {
 							if (menuItem.label === thisLayerEx.arcgisProps.title) {
@@ -142,7 +164,8 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 								}
 							}
 						});
-
+						
+						//Add to the internal list of image services
 						_self.imageServices.push({
 							label : thisLayerEx.arcgisProps.title,
 							id : thisLayerEx.id
@@ -166,6 +189,9 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 					_self.selectedImageService = _self.imageServices[0]['id'];
 				}
 
+				/*
+				 * Load Widgets
+				 */
 				//Image Properties Widget
 				_self.imagePropertiesControl = new ImagePropertiesControl({
 					map : _self.map
