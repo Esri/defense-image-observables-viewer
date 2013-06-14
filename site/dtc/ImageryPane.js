@@ -86,9 +86,6 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 					return;
 				}
 
-				//Set always use proxy
-				esriConfig.defaults.io.alwaysUseProxy = true;
-
 				//Set up the Web Worker
 				esriConfig.defaults.esrix = {
 					'layers' : {
