@@ -233,10 +233,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 	
 		_changeVisibility: function(newService) {
 			var _self = this;
-			console.log(newService);
-			console.log('-------------');
 			array.forEach(this.imageServices, function(service){
-				console.log(service);
 				_self.map.getLayer(service.id).setVisibility(service.id === newService);
 			});
 		}
