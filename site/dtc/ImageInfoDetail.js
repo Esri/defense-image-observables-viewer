@@ -188,6 +188,9 @@ function(declare, connect, array, lang, on,
 								v = codedValue.name;
 							}
 						});
+					} else if (_self.fields[name].type === "esriFieldTypeDate") {
+						var thisDate = new Date(parseInt(thisImage.attributes[name]));
+						v = thisDate.toISOString();
 					} else {
 						//Otherwise, get the string representation
 						v = String(thisImage.attributes[name])
