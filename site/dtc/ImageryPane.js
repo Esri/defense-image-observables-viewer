@@ -143,12 +143,10 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 							brightnessValue : 0
 						});
 						
-						//Testing - I don't think I need to set the proxy manually, it should auto-detect
-						//Canvas has the cross-domain restrictions; add the source to the proxy rules
-//						urlUtils.addProxyRule({
-//							urlPrefix : thisLayer.url,
-//							proxyUrl : esriConfig.defaults.io.proxyUrl
-//						});
+						urlUtils.addProxyRule({
+							urlPrefix : thisLayer.url,
+							proxyUrl : esriConfig.defaults.io.proxyUrl
+						});
 
 						//Replace the image service with with ArcGISImageServiceEx version in place
 						map.removeLayer(thisLayer);
@@ -217,7 +215,8 @@ define(["dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array", "dijit/_
 					_self.imagePropertiesControl.set('imageService', newValue);
 					_self.mensuration.set('imageService', newValue);
 					_self.imageInfoDetail.set('imageService', newValue);
-					_self._changeVisibility(newValue);
+//Potential UI enhancement - have dropdown control viewable image layer
+//					_self._changeVisibility(newValue);
 				});
 			});
 
