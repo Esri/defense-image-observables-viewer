@@ -2,12 +2,14 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/document.css">
+    <title>Image Observables</title>
 
-    <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dojox/layout/resources/floatingpane.css">
-    <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
+	<!--replace https://afmcomstaging.esri.com/arcgis/home with the location of your own portal -->
+    <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dijit/themes/claro/document.css">
+
+    <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dojox/layout/resources/floatingpane.css">
+    <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/esri/css/esri.css" />
     <link rel="stylesheet" type="text/css" href="css/layout.css">
     <!--[if IE]>
       <link rel="stylesheet" type="text/css" href="css/ie.css" />
@@ -40,7 +42,7 @@
       }]
     };
     </script>
-    <script type="text/javascript" src="//serverapi.arcgisonline.com/jsapi/arcgis/3.5">
+    <script type="text/javascript" src="//afmcomstaging.esri.com/arcgis/jsapi/jsapi">
 
     </script>
     <script type="text/javascript">
@@ -64,13 +66,13 @@
         i18n = dojo.i18n.getLocalization("esriTemplate","template");
         var  defaults = {
         //The ID for the map from ArcGIS.com
-        webmap: "3aede4005a1142c7ac88f2ac9b0b92d4",
-        //Modify this to point to your sharing service URL if you are using the portal
-        sharingurl: 'http://aficomport.esri.com',//for example: "http://www.arcgis.com",
-        //The id for the web mapping application item that contains configuration info - in most
+        webmap: "54bdfa6d3913462a8963b21a5f6209fb",
+        //Modify this to point to your sharing service URL if you are using a portal different than the where you're getting the JSAPI
+        //sharingurl: '',//for example: "http://www.arcgis.com",
         ////When editing you need to specify a proxyurl (see below) if the service is on a different domain
         //Specify a proxy url if you will be editing, using the elevation profile or have secure services or web maps that are not shared with everyone.
         proxyurl: "/proxy/proxy.ashx",
+        //The id for the web mapping application item that contains configuration info - in most
         //cases this will be null.
         appid: "",
         //set to true to display the title
