@@ -70,6 +70,7 @@ function initMap(options) {
 
 	//JT add display imagetools
 	configOptions.displayimagetools = (configOptions.displayimagetools === "true" || configOptions.displayimagetools === true) ? true : false;
+	configOptions.enableCanvasTools = (configOptions.enableCanvasTools === "true" || configOptions.enableCanvasTools === true) ? true : false;
 
     configOptions.displayscalebar = (configOptions.displayscalebar === "true" || configOptions.displayscalebar === true) ? true : false;
     configOptions.displayslider = (configOptions.displayslider === "true" || configOptions.displayslider === true) ? true : false;
@@ -1684,7 +1685,7 @@ function addImageryPane(){
 	
 	dojo.style(dojo.byId('rightPane'), "width", "220px");
 	require(["dtc/ImageryPane"], function(ImageryPane){
-		var IP = new ImageryPane({'map':map}, "imgPane");
+		var IP = new ImageryPane({'map':map, enableCanvasTools: configOptions.enableCanvasTools}, "imgPane");
 		IP.startup();
 	})
 }      

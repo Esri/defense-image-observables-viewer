@@ -66,9 +66,9 @@
         i18n = dojo.i18n.getLocalization("esriTemplate","template");
         var  defaults = {
         //The ID for the map from ArcGIS.com
-        webmap: "54bdfa6d3913462a8963b21a5f6209fb",
+        webmap: "6822ca3421544947af76f3040ae0462f",
         //Modify this to point to your sharing service URL if you are using a portal different than the where you're getting the JSAPI
-        //sharingurl: '',//for example: "http://www.arcgis.com",
+        sharingurl: 'http://afmcomstaging.esri.com/arcgis',//for example: "http://www.arcgis.com",
         ////When editing you need to specify a proxyurl (see below) if the service is on a different domain
         //Specify a proxy url if you will be editing, using the elevation profile or have secure services or web maps that are not shared with everyone.
         proxyurl: "/proxy/proxy.ashx",
@@ -175,7 +175,9 @@
         //embed = true means the margins will be collapsed to just include the map no title or links
         embed: false,
         //JT image tools option
-        displayimagetools : true
+        displayimagetools : true,
+        //enable brightness / contrast - requires HTML 5 Canvas & proxy use (slows request times)
+        enableCanvasTools : false
       };
 
         var app = new utilities.App(defaults);
