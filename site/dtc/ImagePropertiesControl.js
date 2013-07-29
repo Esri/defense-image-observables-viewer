@@ -166,8 +166,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_Wid
 		_reset : function() {
 			//Reset all options on the image
 			this.imageService.suspend();
-			this.imageService.setBrightnessValue(0);
-			this.imageService.setContrastValue(0);
+			if (this.enableCanvasTools) {
+				this.imageService.setBrightnessValue(0);
+				this.imageService.setContrastValue(0);		
+			}
 			this.imageService.setBandIds([null, null, null]);
 			this.imageService.setRenderingRule(new RasterFunction());
 			this.imageService.resume();
@@ -180,8 +182,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_Wid
 			//This is used in the imageService setter, hence the breakout
 		},
 		_resetUI : function() {
-			this.brightnessSlider.set('value', 0);
-			this.contrastSlider.set('value', 0);
+			if (this.enableCanvasTools) {
+				this.brightnessSlider.set('value', 0);
+				this.contrastSlider.set('value', 0);				
+			}
 			this.gammaSlider.set('value', 1);
 			this.DRAcheck.set('value', false);
 		}
