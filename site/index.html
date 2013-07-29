@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Image Observables</title>
 
+
 	<!--replace https://afmcomstaging.esri.com/arcgis/home with the location of your own portal -->
     <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dijit/themes/claro/document.css">
@@ -43,7 +44,6 @@
     };
     </script>
     <script type="text/javascript" src="//afmcomstaging.esri.com/arcgis/jsapi/jsapi">
-
     </script>
     <script type="text/javascript">
       dojo.require("esri.layout");
@@ -66,9 +66,11 @@
         i18n = dojo.i18n.getLocalization("esriTemplate","template");
         var  defaults = {
         //The ID for the map from ArcGIS.com
-        webmap: "6822ca3421544947af76f3040ae0462f",
+        webmap: "bc5eceeae36c40d6a0867f76a49ce632",
+        //ID for map on AFI staging portal
+        //webmap: "6822ca3421544947af76f3040ae0462f",
         //Modify this to point to your sharing service URL if you are using a portal different than the where you're getting the JSAPI
-        sharingurl: 'http://afmcomstaging.esri.com/arcgis',//for example: "http://www.arcgis.com",
+        sharingurl: 'http://www.arcgis.com', //'http://afmcomstaging.esri.com/arcgis',//for example: "http://www.arcgis.com",
         ////When editing you need to specify a proxyurl (see below) if the service is on a different domain
         //Specify a proxy url if you will be editing, using the elevation profile or have secure services or web maps that are not shared with everyone.
         proxyurl: "/proxy/proxy.ashx",
@@ -81,7 +83,7 @@
         title: "",
         //Enter a description for the application. This description will appear in the left pane
         //if no description is entered the webmap description will be used.
-        description: "",
+        description: "With <i>Image Observables,</i> you can:<ul><li>Interactivly view Image Services</li><li>Measure both area and height in imagery</li><li>Digitize features from imagery</li></ul>",
         //specify an owner for the app - used by the print option. The default value will be the web map's owner
         owner: '',
         //Specify a color theme for the app. Valid options are gray,blue,purple,green and orange

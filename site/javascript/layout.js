@@ -443,7 +443,9 @@ function initUI(response) {
                 iconClass: 'esriDetailsIcon',
                 id: 'detailButton'
             }, dojo.create('div'));
-            dojo.byId('webmap-toolbar-left').appendChild(detailTb.domNode);
+            //JT - Modify left toolbar placement: Detail | Legend | Editor
+            dojo.place(detailTb.domNode, dojo.byId('webmap-toolbar-left'), 'first')
+            //dojo.byId('webmap-toolbar-left').appendChild(detailTb.domNode);
 
             dojo.connect(detailTb, 'onClick', function () {
                 navigateStack('detailPanel');
@@ -469,9 +471,9 @@ function initUI(response) {
             addLegend(layerInfo);
         }
         //JT If the Editor and other left pane widgets are present, toggle the editor widget
-        if (configOptions.displayeditor === true && (configOptions.displaylegend == true || (configOptions.displaydetails == ture && configOptions.description !== ""))) {
-        	navigateStack('editPanel');
-        }
+        //if (configOptions.displayeditor === true && (configOptions.displaylegend == true || (configOptions.displaydetails == ture && configOptions.description !== ""))) {
+        //	navigateStack('editPanel');
+        //}
         if (configOptions.leftPanelVisibility === false) {
             hideLeftPanel();
         }
@@ -1046,7 +1048,9 @@ function addLegend(layerInfo) {
         id: 'legendButton'
     }, dojo.create('div'));
 
-    dojo.byId('webmap-toolbar-left').appendChild(legendTb.domNode);
+	//JT - Modify left toolbar placement: Detail | Legend | Editor
+	dojo.place(legendTb.domNode, dojo.byId('webmap-toolbar-left'), 1);
+    //dojo.byId('webmap-toolbar-left').appendChild(legendTb.domNode);
 
     dojo.connect(legendTb, 'onClick', function () {
         navigateStack('legendPanel');
@@ -1120,7 +1124,9 @@ function addEditor(editLayers) {
     }, dojo.create('div'));
 
     //add the editor button to the left side of the application toolbar 
-    dojo.byId('webmap-toolbar-left').appendChild(editTb.domNode);
+    //dojo.byId('webmap-toolbar-left').appendChild(editTb.domNode);
+    //JT - Modify left toolbar placement: Detail | Legend | Editor
+	dojo.place(editTb.domNode, dojo.byId('webmap-toolbar-left'), 'last');
     dojo.connect(editTb, 'onClick', function () {
         navigateStack('editPanel');
     });
