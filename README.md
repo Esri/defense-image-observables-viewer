@@ -1,10 +1,10 @@
 defense-image-observables-viewer
 ================================
 
-The Image Observables application supports measurement, mensuration and digitization of features from image services.  Image services can also be adjusted (brightness, contrast, channels).
+The Image Observables web application supports measurement, mensuration and digitization of features from image services.  Image services can also be adjusted (brightness, contrast, channels).
 
 
-![App](screenshot.png)
+![App](ScreenShot.png)
 
 ## Features
 
