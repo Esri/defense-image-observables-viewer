@@ -4,13 +4,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Image Observables</title>
 
+    <!-- These links should be used when the users of the application can reach arcgis.com -->
+    <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.8/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.8/js/dojo/dijit/themes/claro/document.css">
+
+    <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.8/js/dojo/dojox/layout/resources/FloatingPane.css">
+    <link rel="stylesheet" type="text/css" href="//js.arcgis.com/3.8/js/esri/css/esri.css" />
+
+    -->
 
 	<!--replace https://afmcomstaging.esri.com/arcgis/home with the location of your own portal -->
+    <!--
     <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dijit/themes/claro/document.css">
 
-    <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dojox/layout/resources/floatingpane.css">
+    <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/dojo/dojox/layout/resources/FloatingPane.css">
     <link rel="stylesheet" type="text/css" href="//afmcomstaging.esri.com/arcgis/home/js/esri/css/esri.css" />
+    -->
     <link rel="stylesheet" type="text/css" href="css/layout.css">
     <!--[if IE]>
       <link rel="stylesheet" type="text/css" href="css/ie.css" />
@@ -43,8 +53,15 @@
       }]
     };
     </script>
+    <!-- ArcGIS Online JSAPI -->
+    
+    <script type="text/javascript" src="//js.arcgis.com/3.8"></script>
+    
+    <!-- Portal for ArcGIS API location -->
+    <!--
     <script type="text/javascript" src="//afmcomstaging.esri.com/arcgis/jsapi/jsapi">
     </script>
+    -->
     <script type="text/javascript">
       dojo.require("esri.layout");
     </script>
@@ -66,7 +83,7 @@
         i18n = dojo.i18n.getLocalization("esriTemplate","template");
         var  defaults = {
         //The ID for the map from ArcGIS.com
-        webmap: "bc5eceeae36c40d6a0867f76a49ce632",
+        webmap: "107fec227570488a9ae19768b648fe2a", //"bc5eceeae36c40d6a0867f76a49ce632",
         //ID for map on AFI staging portal
         //webmap: "6822ca3421544947af76f3040ae0462f",
         //Modify this to point to your sharing service URL if you are using a portal different than the where you're getting the JSAPI
