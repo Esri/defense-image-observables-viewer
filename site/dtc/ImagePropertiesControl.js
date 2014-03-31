@@ -15,7 +15,7 @@
  * 		-css/ImagePropertiesControl.css
  */
 
-define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImagePropertiesControl.html", "dijit/form/HorizontalSlider", "dijit/form/Select", "dijit/form/CheckBox", "dijit/form/Button", "esri/layers/RasterFunction", "dojo/dom-construct", "dojo/query"], function(declare, array, lang, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, HorizontalSlider, Select, CheckBox, Button, RasterFunction, domConstruct, query) {
+define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./templates/ImagePropertiesControl.html", "dijit/form/HorizontalSlider", "dijit/form/Select", "dijit/form/CheckBox", "dijit/form/Button", "esri/dijit/LayerSwipe" ,"esri/layers/RasterFunction", "dojo/dom-construct", "dojo/query"], function(declare, array, lang, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, dijitTemplate, HorizontalSlider, Select, CheckBox, Button, LayerSwipe, RasterFunction, domConstruct, query) {
 	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		declaredClass : "dtc.ImagePropertiesControl",
 		templateString : dijitTemplate,
@@ -23,9 +23,11 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_Wid
 		options : {
 			imageService : null,
 			map : null,
-			enableCanvasTools : null
+			enableCanvasTools : null,
 		},
 		rasterFunction : null,
+        swipeWidget: null,
+        visibilityHandler: null,
 
 		constructor : function(options, srcRefNode) {
 			declare.safeMixin(this.options, options);
@@ -69,16 +71,30 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_Wid
 			}
 			_self.gammaSlider.on("change", lang.hitch(_self, _self._updateRasterFunction));
 			_self.DRAcheck.on("change", lang.hitch(_self, _self._updateRasterFunction));
+            _self.SwipeCheck.on("change", lang.hitch(_self, _self._updateSwipeFunction));
 			_self.redSelect.on("change", lang.hitch(_self, _self._updateChannels));
 			_self.greenSelect.on("change", lang.hitch(_self, _self._updateChannels));
 			_self.blueSelect.on("change", lang.hitch(_self, _self._updateChannels));
 			_self.resetButton.on("click", lang.hitch(_self, _self._reset));
+            
+            //Event handler to turn off swiping when swipe layer visibility cahgnes
+            if (this.imageService) {
+                if (_self.imageService.loaded === true) {
+                    _self.visibilityHandler = _self.imageService.on("visibility-change", lang.hitch(_self, _self._visibilityChanged));
+                } else {
+                    _self.imageService.on('load', function(){
+                        _self.visibilityHandler = _self.imageService.on("visibility-change", lang.hitch(_self, _self._visibilityChanged));
+                    });
+                }
+            }            
+            
 		},
 
 		//Custom setter for the imageService variable to determine what options are supported
 		_setImageServiceAttr : function(/*string (ID)*/serviceID) {
 			var _self = this;
 			var service = null;
+            _self._set("imageService", null);
 			//Get the service from the map
 			if (serviceID) {
 				service = this.map.getLayer(serviceID);
@@ -87,11 +103,13 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_Wid
 					_self._set('imageService', service);
 					_self._resetUI();
 					lang.hitch(_self, _self._setChannels(service));
+                    _self.imageService.on("visibility-change", lang.hitch(_self, _self._visibilityChanged));
 				} else {
 					service.on('load', function() {
 						_self._set('imageService', service);
 						_self._resetUI();
 						lang.hitch(_self, _self._setChannels(service));
+                        _self.imageService.on("visibility-change", lang.hitch(_self, _self._visibilityChanged));
 					});
 				}
 			} else {
@@ -156,12 +174,57 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_Wid
 			this.imageService.setRenderingRule(rf);
 			this.gammaValue.innerHTML = this.gammaSlider.value.toFixed(1);
 		},
+        
+        _updateSwipeFunction: function() {
+            console.log("_updateSwipeFunction " + this.SwipeCheck.get('value') + " " + this.swipeWidget);
+            var onOff = this.SwipeCheck.get('value');
+            if(onOff === 'on') {
+                var swipeLayers = [];
+                if (this.imageServiceLayers) {
+                    for (var k=this.imageServiceLayers.length-1; k>=0; k-- ) {
+                        if(this.imageServiceLayers[k].visible) {
+                            swipeLayers.push(this.imageServiceLayers[k])
+                            break;
+                        }
+                    }
+                }
+                console.log(this.imageService);
+                this.swipeWidget = new LayerSwipe({
+                    type:"vertical",
+                    top:250,
+                    map:this.map,
+                    layers:[this.imageService]
+                });
+                this.swipeWidget.startup();
+            } else {
+                if(this.swipeWidget !== null) {
+                    console.log('destroying swipe widget')
+                    this.swipeWidget.destroy();
+                    this.swipeWidget = null;
+                }
+            }
+        },
 
 		_updateChannels : function() {
 			//Set the band IDs based on dropdown values
 			//Values are strings, so use parseInt
 			this.imageService.setBandIds([parseInt(this.redSelect.get('value')), parseInt(this.greenSelect.get('value')), parseInt(this.blueSelect.get('value'))]);
 		},
+        
+        _visibilityChanged: function(e) {
+            if (e.target === this.imageService) {
+                console.log('visibility changed: ' + e.visible);
+                if(e.visible) {
+                    if (this.swipeWidget) {
+                        this.swipeWidget.enable();
+                    }
+                } else {
+                    if (this.swipeWidget) {
+                        this.swipeWidget.disable();
+                    }
+                }
+            }            
+        },
 
 		_reset : function() {
 			//Reset all options on the image
@@ -182,12 +245,20 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dijit/_Wid
 			//This is used in the imageService setter, hence the breakout
 		},
 		_resetUI : function() {
+            if (this.visibilityHandler) {
+                this.visibilityHandler.remove();
+                this.visibilityHandler = null;
+            }
 			if (this.enableCanvasTools) {
 				this.brightnessSlider.set('value', 0);
 				this.contrastSlider.set('value', 0);				
 			}
 			this.gammaSlider.set('value', 1);
 			this.DRAcheck.set('value', false);
+            if(this.swipeWidget){
+                this.swipeWidget.destroy();
+                this.SwipeCheck.set('value', false);
+            }
 		}
 	});
 
