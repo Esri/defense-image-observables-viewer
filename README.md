@@ -1,6 +1,8 @@
 defense-image-observables-viewer
 ================================
 
+___This repository is no longer maintained. For more information, please visit the [Esri Product Life Cycle](http://support.esri.com/en/content/productlifecycles) page.___
+
 The Image Observables web application supports measurement, mensuration and digitization of features from image services.  Image services can also be adjusted (brightness, contrast, channels).
 
 
